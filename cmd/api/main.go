@@ -23,7 +23,7 @@ import (
 /* BODY='{"email": "carol@example.com", "password": "pa55word"}' */
 /* hey -d "$BODY" -m "POST" http://localhost:4000/v1/tokens/authentication */
 
-const version = "1.0.0"
+const version = "0.1.0"
 
 type config struct {
 	port int
