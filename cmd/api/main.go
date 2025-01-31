@@ -7,7 +7,7 @@ import (
 	"flag"
 	"fmt"
 	_ "github.com/lib/pq"
-	"github.com/pistolricks/go-api-template/internal/data"
+	"github.com/pistolricks/go-api-template/internal/extended"
 	"github.com/pistolricks/mailer"
 	"github.com/pistolricks/models/cmd/models"
 
@@ -55,7 +55,7 @@ type application struct {
 	config   config
 	logger   *slog.Logger
 	models   models.Models
-	extended data.Extended
+	extended extended.Extended
 	mailer   mailer.Mailer
 	wg       sync.WaitGroup
 }
@@ -127,7 +127,7 @@ func main() {
 		config:   cfg,
 		logger:   logger,
 		models:   models.NewModels(db),
-		extended: data.NewExtended(db),
+		extended: extended.NewExtended(db),
 		mailer:   mailer.New(cfg.smtp.host, cfg.smtp.port, cfg.smtp.username, cfg.smtp.password, cfg.smtp.sender),
 	}
 

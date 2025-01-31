@@ -3,17 +3,17 @@ package main
 import (
 	"errors"
 	"fmt"
-	"github.com/pistolricks/go-api-template/internal/data"
+	"github.com/pistolricks/go-api-template/internal/extended"
 	"github.com/pistolricks/validation"
 	"net/http"
 )
 
 func (app *application) createVendorHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
-		Title   string       `json:"title"`
-		Year    int32        `json:"year"`
-		Runtime data.Runtime `json:"runtime"`
-		Genres  []string     `json:"genres"`
+		Title   string           `json:"title"`
+		Year    int32            `json:"year"`
+		Runtime extended.Runtime `json:"runtime"`
+		Genres  []string         `json:"genres"`
 	}
 
 	err := app.readJSON(w, r, &input)
@@ -22,7 +22,7 @@ func (app *application) createVendorHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	vendor := &data.Vendor{
+	vendor := &extended.Vendor{
 		Title:   input.Title,
 		Year:    input.Year,
 		Runtime: input.Runtime,
@@ -31,7 +31,7 @@ func (app *application) createVendorHandler(w http.ResponseWriter, r *http.Reque
 
 	v := validation.New()
 
-	if data.ValidateVendor(v, vendor); !v.Valid() {
+	if extended.ValidateVendor(v, vendor); !v.Valid() {
 		app.failedValidationResponse(w, r, v.Errors)
 		return
 	}
@@ -61,7 +61,7 @@ func (app *application) showVendorHandler(w http.ResponseWriter, r *http.Request
 	vendor, err := app.extended.Vendors.Get(id)
 	if err != nil {
 		switch {
-		case errors.Is(err, data.ErrRecordNotFound):
+		case errors.Is(err, extended.ErrRecordNotFound):
 			app.notFoundResponse(w, r)
 		default:
 			app.serverErrorResponse(w, r, err)
@@ -85,7 +85,7 @@ func (app *application) updateVendorHandler(w http.ResponseWriter, r *http.Reque
 	vendor, err := app.extended.Vendors.Get(id)
 	if err != nil {
 		switch {
-		case errors.Is(err, data.ErrRecordNotFound):
+		case errors.Is(err, extended.ErrRecordNotFound):
 			app.notFoundResponse(w, r)
 		default:
 			app.serverErrorResponse(w, r, err)
@@ -94,10 +94,10 @@ func (app *application) updateVendorHandler(w http.ResponseWriter, r *http.Reque
 	}
 
 	var input struct {
-		Title   *string       `json:"title"`
-		Year    *int32        `json:"year"`
-		Runtime *data.Runtime `json:"runtime"`
-		Genres  []string      `json:"genres"`
+		Title   *string           `json:"title"`
+		Year    *int32            `json:"year"`
+		Runtime *extended.Runtime `json:"runtime"`
+		Genres  []string          `json:"genres"`
 	}
 
 	err = app.readJSON(w, r, &input)
@@ -122,7 +122,7 @@ func (app *application) updateVendorHandler(w http.ResponseWriter, r *http.Reque
 
 	v := validation.New()
 
-	if data.ValidateVendor(v, vendor); !v.Valid() {
+	if extended.ValidateVendor(v, vendor); !v.Valid() {
 		app.failedValidationResponse(w, r, v.Errors)
 		return
 	}
@@ -130,7 +130,7 @@ func (app *application) updateVendorHandler(w http.ResponseWriter, r *http.Reque
 	err = app.extended.Vendors.Update(vendor)
 	if err != nil {
 		switch {
-		case errors.Is(err, data.ErrEditConflict):
+		case errors.Is(err, extended.ErrEditConflict):
 			app.editConflictResponse(w, r)
 		default:
 			app.serverErrorResponse(w, r, err)
@@ -154,7 +154,7 @@ func (app *application) deleteVendorHandler(w http.ResponseWriter, r *http.Reque
 	err = app.extended.Vendors.Delete(id)
 	if err != nil {
 		switch {
-		case errors.Is(err, data.ErrRecordNotFound):
+		case errors.Is(err, extended.ErrRecordNotFound):
 			app.notFoundResponse(w, r)
 		default:
 			app.serverErrorResponse(w, r, err)
@@ -172,7 +172,7 @@ func (app *application) listVendorsHandler(w http.ResponseWriter, r *http.Reques
 	var input struct {
 		Title  string
 		Genres []string
-		data.Filters
+		extended.Filters
 	}
 
 	v := validation.New()
@@ -188,7 +188,7 @@ func (app *application) listVendorsHandler(w http.ResponseWriter, r *http.Reques
 	input.Filters.Sort = app.readString(qs, "sort", "id")
 	input.Filters.SortSafelist = []string{"id", "title", "year", "runtime", "-id", "-title", "-year", "-runtime"}
 
-	if data.ValidateFilters(v, input.Filters); !v.Valid() {
+	if extended.ValidateFilters(v, input.Filters); !v.Valid() {
 		app.failedValidationResponse(w, r, v.Errors)
 		return
 	}

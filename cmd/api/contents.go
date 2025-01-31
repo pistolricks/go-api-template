@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/pistolricks/go-api-template/internal/data"
+	"github.com/pistolricks/go-api-template/internal/extended"
 	"github.com/pistolricks/validation"
 	"mime/multipart"
 	"net/http"
@@ -69,7 +69,7 @@ func (app *application) uploadImageHandler(w http.ResponseWriter, r *http.Reques
 		}
 	}(dst)
 
-	content := &data.Content{
+	content := &extended.Content{
 		ID:        input.ID,
 		CreatedAt: input.CreatedAt,
 		Name:      filename,
@@ -84,7 +84,7 @@ func (app *application) uploadImageHandler(w http.ResponseWriter, r *http.Reques
 
 	v := validation.New()
 
-	if data.ValidateContent(v, content); !v.Valid() {
+	if extended.ValidateContent(v, content); !v.Valid() {
 		app.failedValidationResponse(w, r, v.Errors)
 		return
 	}
