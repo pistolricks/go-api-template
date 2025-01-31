@@ -89,7 +89,7 @@ func (app *application) uploadImageHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	err = app.models.Contents.EncodeWebP(content)
+	err = app.extended.Contents.EncodeWebP(content)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 		return

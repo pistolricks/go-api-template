@@ -11,11 +11,13 @@ var (
 )
 
 type Extended struct {
-	Vendors VendorModel
+	Vendors  VendorModel
+	Contents ContentModel
 }
 
 func NewExtended(db *sql.DB) Extended {
 	return Extended{
-		Vendors: VendorModel{DB: db},
+		Vendors:  VendorModel{DB: db},
+		Contents: ContentModel{DB: db},
 	}
 }
