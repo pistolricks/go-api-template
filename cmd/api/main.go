@@ -7,6 +7,7 @@ import (
 	"flag"
 	"fmt"
 	_ "github.com/lib/pq"
+	"github.com/pistolricks/go-api-template/internal/data"
 	"github.com/pistolricks/mailer"
 	"github.com/pistolricks/models/cmd/models"
 
@@ -51,11 +52,12 @@ type config struct {
 }
 
 type application struct {
-	config config
-	logger *slog.Logger
-	models models.Models
-	mailer mailer.Mailer
-	wg     sync.WaitGroup
+	config   config
+	logger   *slog.Logger
+	models   models.Models
+	extended data.Extended
+	mailer   mailer.Mailer
+	wg       sync.WaitGroup
 }
 
 func main() {

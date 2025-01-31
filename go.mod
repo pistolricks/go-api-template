@@ -13,7 +13,11 @@ require (
 )
 
 require (
+	github.com/devedge/imagehash v0.0.0-20180324030135-7061aa3b4066 // indirect
+	github.com/disintegration/imaging v1.6.2 // indirect
 	github.com/go-mail/mail/v2 v2.3.0 // indirect
+	github.com/kolesa-team/go-webp v1.0.4 // indirect
 	golang.org/x/crypto v0.32.0 // indirect
+	golang.org/x/image v0.23.0 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 )
